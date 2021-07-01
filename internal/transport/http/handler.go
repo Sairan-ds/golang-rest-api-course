@@ -22,6 +22,6 @@ func (h *Handler) SetupRoutes() {
 	fmt.Println("Setting Up Routes")
 	h.Router = mux.NewRouter()
 	h.Router.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "I am alive!")
+		fmt.Fprintf(w, "I am alive!!")
 	})
 }
