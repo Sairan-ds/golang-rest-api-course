@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Sairan-ds/golang-rest-api-course/internal/comment"
+	"github.com/Sairan-ds/golang-rest-api-course/internal/database"
 	transportHttp "github.com/Sairan-ds/golang-rest-api-course/internal/transport/http"
 )
 
@@ -15,13 +17,27 @@ type App struct{}
 func (app *App) Run() error {
 	fmt.Println("Setting Up Our APP")
 
-	handler := transportHttp.NewHandler()
+	var err error
+	db, err := database.NewDatabase()
+	if err != nil {
+		return err
+	}
+
+	err = database.MigrateDb(db)
+	if err != nil {
+		return err
+	}
+
+	commentService := comment.NewService(db)
+
+	handler := transportHttp.NewHandler(commentService)
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
 		fmt.Println("Failed to set up server")
 		return err
 	}
+
 	return nil
 }
 

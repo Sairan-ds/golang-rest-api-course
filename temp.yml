@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api.tutorialedge.net
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      name: api.tutorialedge.net
+  template:
+    metadata:
+      labels:
+        name: api.tutorialedge.net
+    spec:
+      containers:
+      - name: application
+        image: "forbsey/comments-api:latest"
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        env:
+          - name: DB_PORT
+            value: ""
+          - name: DB_HOST
+            value: ""
+          - name: DB_PASSWORD
+            value: ""
+          - name: DB_TABLE
+            value: ""
+          - name: DB_USERNAME
+            value: ""
